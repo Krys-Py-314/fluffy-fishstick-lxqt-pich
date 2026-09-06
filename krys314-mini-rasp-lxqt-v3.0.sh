@@ -46,7 +46,7 @@ sudo apt full-upgrade -y
 # 2. INSTALL X11 AND LXQT CORE
 # ======================================================
 print_status "Installing X11, Openbox, and LXQt..."
-sudo apt install -y \
+sudo apt install -y --no-install-recommends  \
     xserver-xorg \
     xserver-xorg-core \
     xserver-xorg-input-libinput \
@@ -81,7 +81,7 @@ sudo apt install -y \
 print_status "Installing themes and icons..."
 
 # Install Arc Theme (includes Arc-Dark variant)
-sudo apt install -y arc-theme
+sudo apt install -y --no-install-recommends  arc-theme
 
 # Create symbolic links for Arc-Dark theme if needed
 # The arc-theme package includes Arc-Dark, but we need to ensure it's available
@@ -96,10 +96,10 @@ else
 fi
 
 # Numix Icon Theme
-sudo apt install -y numix-icon-theme numix-icon-theme-circle
+sudo apt install -y --no-install-recommends  numix-icon-theme numix-icon-theme-circle
 
 # Additional GTK theme tools
-sudo apt install -y lxappearance qt5ct
+sudo apt install -y --no-install-recommends  lxappearance qt5ct
 
 # ======================================================
 # 4. INSTALL APPLICATIONS
@@ -107,37 +107,33 @@ sudo apt install -y lxappearance qt5ct
 print_status "Installing applications..."
 
 # Terminal and text editors
-sudo apt install -y \
+sudo apt install -y --no-install-recommends  \
     xfce4-terminal \
     l3afpad \
     pcmanfm-qt
 
 # Web browser (vimb - lightweight webkit browser)
-sudo apt install -y vimb
+sudo apt install -y --no-install-recommends  \
+    vimb
 
 
 
 # Raspberry Pi specific tools and kernel headers
-sudo apt install -y\
+sudo apt install -y --no-install-recommends \
     linux-headers-$(uname -r)
-#    raspi-config \
 #    raspi-utils-core
 
 #    linux-headers-rpi-v8
 
 # GPIO Libraries and Tools (modern - compatible with Pi 5)
-#sudo apt install -y \
+#sudo apt install -y --no-install-recommends  \
 #    raspi-config \
 #    raspi-utils \
-#    python3-lgpio \
-#    python3-gpiozero \
-#    swig \
-#    python3-dev \
 #    rgpiod \
 #    rgpio-tools
 
 # System utilities
-sudo apt install -y \
+sudo apt install -y --no-install-recommends  \
     fastfetch \
     flameshot \
     lximage-qt \
@@ -147,7 +143,7 @@ sudo apt install -y \
     dropbear
 
 # Notification and panel plugins
-sudo apt install -y \
+sudo apt install -y --no-install-recommends  \
     lxqt-notificationd \
     pavucontrol-qt
 
@@ -167,30 +163,14 @@ print_status "Installing Pi-Apps (Raspberry Pi App Store)..."
 # ======================================================
 # 6. INSTALL SUBLIME TEXT 3 (UPDATED FOR BOOKWORM)
 # ======================================================
-#print_status "Installing Sublime Text 3..."
+print_status "Installing Gean..."
 
-# Install prerequisites for adding repositories securely
-#sudo apt install -y gnupg2 wget
-
-# Download the GPG key, de-armor it, and save it to the keyrings directory
-#sudo mkdir -p /usr/share/keyrings
-#wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | \
-#    gpg --dearmor | \
-#    sudo tee /usr/share/keyrings/sublimehq-archive-keyring.gpg > /dev/null
-
-# Add the Sublime Text repository, explicitly pointing to the new keyring
-#echo "deb [signed-by=/usr/share/keyrings/sublimehq-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | \
-#    sudo tee /etc/apt/sources.list.d/sublime-text.list
-
-# Update package list and install Sublime Text
-#sudo apt update
-#sudo apt install -y sublime-text
-
+#
 # ======================================================
 # 7. INSTALL OH-MY-POSH AND NERD FONTS (ROBUST VERSION)
 # ======================================================
 print_status "Installing Oh-My-Posh and Nerd Fonts..."
-sudo apt install -y curl unzip
+sudo apt install -y --no-install-recommends  curl unzip
 
 # Install Oh-My-Posh with sudo to ensure system-wide availability
 print_status "Attempting to install Oh-My-Posh..."
@@ -205,12 +185,12 @@ grep -qxF 'eval "$(oh-my-posh init bash)"' "$BASHRC" || \
   sudo echo 'eval "$(oh-my-posh init bash)"' >> "$BASHRC"
 
 
-# Download and install Ubuntu  Font
+# Download and install Ubuntu Nerd Font
 FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
 print_status "Downloading Ubuntu Nerd Font..."
-wget -q --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
+wget -qO- --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
     https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Ubuntu.zip
 
 # Extract font
@@ -356,15 +336,17 @@ print_status "Configuring LightDM..."
 sudo systemctl enable lightdm
 
 # Configure LightDM for autologin
-mkdir -p /etc/lightdm/lightdm.conf.d
-sudo cat > /etc/lightdm/lightdm.conf.d/99-autologin.conf << 'EOF'
+
+sudo mkdir -p /etc/lightdm/lightdm.conf.d
+
+sudo tee /etc/lightdm/lightdm.conf.d/99-autologin.conf  >/dev/null <<'EOF'
 [Seat:*]
 autologin-user=$(whoami)
 autologin-user-timeout=0
 EOF
 
 # Configure LightDM GTK Greeter with Arc-Dark
-cat > /etc/lightdm/lightdm-gtk-greeter.conf <<' EOF'
+sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<' EOF'
 [greeter]
 theme-name=Arc-Dark
 icon-theme-name=Numix
@@ -571,5 +553,3 @@ print_status "  ✓ Resolution set to 1920x1080"
 print_status ""
 print_status "Rebooting in 5 seconds..."
 sleep 5
-
-sudo reboot now
