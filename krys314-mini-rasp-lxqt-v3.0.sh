@@ -14,19 +14,25 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
-
+#-------------------------------------------------------
 print_status() {
     echo -e "${GREEN}[INFO]${NC} $1"
 }
-
+#-------------------------------------------------------
 print_warning() {
     echo -e "${YELLOW}[WARN]${NC} $1"
 }
-
+#-------------------------------------------------------
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
-
+#-------------------------------------------------------
+banner() {
+    print_status " "
+    print_status " $1"
+    print_status " "
+}
+#-------------------------------------------------------
 # Check if running as root
 if [ "$EUID" -eq 0 ]; then
     print_error "Please do not run this script as root. Run as normal user with sudo privileges."
@@ -116,21 +122,36 @@ sudo apt install -y --no-install-recommends  \
 sudo apt install -y --no-install-recommends  \
     vimb
 
-
-
 # Raspberry Pi specific tools and kernel headers
 sudo apt install -y --no-install-recommends \
     linux-headers-$(uname -r)
-#    raspi-utils-core
-
-#    linux-headers-rpi-v8
 
 # GPIO Libraries and Tools (modern - compatible with Pi 5)
-#sudo apt install -y --no-install-recommends  \
-#    raspi-config \
-#    raspi-utils \
-#    rgpiod \
-#    rgpio-tools
+sudo apt install -y --no-install-recommends  \
+    raspi-utils \
+    rgpiod \
+    rgpio-tools
+
+# Raspberry Pi core utilities (vcgencmd, pinctrl, vclog, vcmailbox).
+sudo apt install -y --no-install-recommends \
+    raspi-utils-core \
+    libraspberrypi-bin
+
+sudo apt install -y --no-install-recommends 
+    raspi-gpio \
+    raspi-config
+
+# GPIO for C on the Pi 5: the RP1 southbridge means bcm2835/wiringPi/pigpio
+# no longer apply. libgpiod is the supported character-device API; lgpio is
+# installed too when the release offers it.
+sudo apt install -y --no-install-recommends \
+    libgpiod-dev \
+    gpiod
+
+sudo apt install -y --no-install-recommends \
+    liblgpio-dev \
+    liblgpio1
+
 
 # System utilities
 sudo apt install -y --no-install-recommends  \
@@ -529,6 +550,20 @@ sudo apt install  \
     git \
     curl \
    linux-headers-$(uname -r)
+
+# ======================================================
+# 19. Configuring xorg.conf
+# ======================================================
+sudo mkdir -p /etc/X11/xorg.conf.d
+sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
+Section "OutputClass"
+    Identifier "vc4"
+    MatchDriver "vc4"
+    Driver "modesetting"
+    Option "PrimaryGPU" "true"
+EndSection
+EOF
+print_status "Wrote /etc/X11/xorg.conf.d/99-vc4.conf"
 
 # Clean package cache
 sudo apt clean
