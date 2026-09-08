@@ -46,19 +46,19 @@ if [ "$EUID" -eq 0 ]; then
     exit 1
 fi
 
-print_status "Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
+banner "    Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
 
 # ======================================================
 banner " 1. SYSTEM UPDATE"
 # ======================================================
-print_status "Updating system packages..."
+print_status "    Updating system packages..."
 sudo apt update
 sudo apt full-upgrade -y
 
 # ======================================================
  banner "2. INSTALL X11 AND LXQT CORE"
 # ======================================================
-print_status "Installing X11, Openbox, and LXQt..."
+print_status "    Installing X11, Openbox, and LXQt..."
 sudo apt install -y \
     xserver-xorg \
     xserver-xorg-core \
@@ -91,7 +91,7 @@ sudo apt install -y \
 # ======================================================
 banner " 3. INSTALL THEMES AND ICONS"
 # ======================================================
-print_status "Installing themes and icons..."
+print_status "    Installing themes and icons..."
 
 # Install Arc Theme (includes Arc-Dark variant)
 sudo apt install -y arc-theme
@@ -99,7 +99,7 @@ sudo apt install -y arc-theme
 # Create symbolic links for Arc-Dark theme if needed
 # The arc-theme package includes Arc-Dark, but we need to ensure it's available
 if [ -d "/usr/share/themes/Arc-Dark" ]; then
-    print_status "Arc-Dark theme already installed"
+    print_status "    Arc-Dark theme already installed"
 else
     print_warning "Arc-Dark theme not found, creating symlink..."
     # If Arc-Dark doesn't exist but Arc does, create a symlink
@@ -117,7 +117,7 @@ sudo apt install -y lxappearance qt5ct
 # ======================================================
 banner " 4. INSTALL APPLICATIONS"
 # ======================================================
-print_status "Installing applications..."
+print_status "    Installing applications..."
 
 # Terminal and text editors
 sudo apt install -y \
@@ -167,7 +167,7 @@ sudo apt install -y \
 # ======================================================
 banner " 5. INSTALL PI-APPS (Raspberry Pi App Store)"
 # ======================================================
-print_status "Installing Pi-Apps (Raspberry Pi App Store)..."
+print_status "    Installing Pi-Apps (Raspberry Pi App Store)..."
 
 # Pi-Apps is not available as a Debian package - it must be installed via its official script
 # Pi-Apps is the most popular app store for Raspberry Pi, with over 200 applications
@@ -175,12 +175,12 @@ print_status "Installing Pi-Apps (Raspberry Pi App Store)..."
 
 #wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
 
-#print_status "Pi-Apps installed successfully! You can run it with: pi-apps"
+#print_status "    Pi-Apps installed successfully! You can run it with: pi-apps"
 
 # ======================================================
 banner " 6. INSTALL SUBLIME TEXT 3 (skipped)"
 # ======================================================
-#print_status "Installing Sublime Text 3..."
+#print_status "    Installing Sublime Text 3..."
 
 # Install prerequisites for adding repositories securely
 #sudo apt install -y gnupg2 wget
@@ -202,11 +202,11 @@ banner " 6. INSTALL SUBLIME TEXT 3 (skipped)"
 # ======================================================
 banner " 7. INSTALL OH-MY-POSH AND NERD FONTS (ROBUST VERSION)"
 # ======================================================
-print_status "Installing Oh-My-Posh and Nerd Fonts..."
+print_status "    Installing Oh-My-Posh and Nerd Fonts..."
 sudo apt install -y curl unzip
 
 # Install Oh-My-Posh with sudo to ensure system-wide availability
-print_status "Attempting to install Oh-My-Posh..."
+print_status "    Attempting to install Oh-My-Posh..."
 sudo curl -s https://ohmyposh.dev/install.sh | sudo bash -s
 
 #sudo -u "$TARGET_USER" bash -lc 'curl -s https://ohmyposh.dev/install.sh | bash -s'
@@ -222,7 +222,7 @@ grep -qxF 'eval "$(oh-my-posh init bash)"' "$BASHRC" || \
 FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
-print_status "Downloading Ubuntu Nerd Font..."
+print_status "    Downloading Ubuntu Nerd Font..."
 wget -qO- --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
     https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Ubuntu.zip
 
@@ -241,7 +241,7 @@ fc-cache -fv > /dev/null
 # ======================================================
 banner " 8. CONFIGURE OPENBOX (Square Windows with Arc-Dark)"
 # ======================================================
-print_status "Configuring Openbox with square windows and Arc-Dark theme..."
+print_status "    Configuring Openbox with square windows and Arc-Dark theme..."
 
 mkdir -p ~/.config/openbox
 if [ -f /etc/xdg/openbox/rc.xml ]; then
@@ -292,7 +292,7 @@ fi
 # ======================================================
 banner " 9. CONFIGURE LXQT PANEL (Left Side with Widgets)"
 # ======================================================
-print_status "Configuring LXQt panel..."
+print_status "    Configuring LXQt panel..."
 
 # Create panel configuration directory
 mkdir -p ~/.config/lxqt
@@ -352,7 +352,7 @@ EOF
 # ======================================================
 banner " 10. CONFIGURE LXQT SESSION"
 # ======================================================
-print_status "Configuring LXQt session..."
+print_status "    Configuring LXQt session..."
 
 # Create LXQt session config
 mkdir -p ~/.config/lxqt-session
@@ -373,13 +373,13 @@ EOF
 # ======================================================
 banner " 11. CONFIGURE LIGHTDM AND AUTOLOGIN"
 # ======================================================
-print_status "Configuring LightDM..."
+print_status "    Configuring LightDM..."
 
 # Set LightDM as default display manager
 sudo systemctl enable lightdm
 
 # Configure LightDM for autologin
-print_status "    Configuring LightDM for autologin"
+print_status "        Configuring LightDM for autologin"
 
 sudo mkdir -p /etc/lightdm/lightdm.conf.d
 
@@ -391,7 +391,7 @@ EOF
 
 
 #configure Rpi 5 video driver to enable startx 
-print_status "    Configuring Rpi 5 video driver to enable startx"
+print_status "        Configuring Rpi 5 video driver to enable startx"
 
 sudo mkdir -p /etc/X11/xorg.conf.d
 sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
@@ -418,7 +418,7 @@ EOF
 # ======================================================
 banner " 12. CONFIGURE GTK THEMES (Arc-Dark)"
 # ======================================================
-print_status "Configuring GTK themes with Arc-Dark..."
+print_status "    Configuring GTK themes with Arc-Dark..."
 
 # Create GTK3 configuration
 mkdir -p ~/.config/gtk-3.0
@@ -457,7 +457,7 @@ EOF
 # ======================================================
 banner " 13. CONFIGURE QT5 THEMES"
 # ======================================================
-print_status "Configuring Qt5 theme..."
+print_status "    Configuring Qt5 theme..."
 
 mkdir -p ~/.config/qt5ct
 cat > ~/.config/qt5ct/qt5ct.conf << 'EOF'
@@ -497,7 +497,7 @@ EOF
 # ======================================================
 banner " 14. SET RESOLUTION TO 1920x1080"
 # ======================================================
-print_status "Setting resolution to 1920x1080..."
+print_status "    Setting resolution to 1920x1080..."
 
 # Add to config.txt for Pi 5
 #cat > /boot/firmware/config.txt << 'EOF'
@@ -519,7 +519,7 @@ EOF
 # ======================================================
 banner " 15. CREATE AUTOSTART CONFIGURATION"
 # ======================================================
-print_status "Creating autostart configuration..."
+print_status "    Creating autostart configuration..."
 
 cat > ~/.config/openbox/autostart << 'EOF'
 #!/bin/bash
@@ -547,7 +547,7 @@ EOF
 # ======================================================
 banner " 16. CREATE CUSTOM ENVIRONMENT VARIABLES"
 # ======================================================
-print_status "Setting environment variables..."
+print_status "     Setting environment variables..."
 
 sudo tee ~/.profile >/dev/null <<'EOF'
 # Set QT theme
@@ -564,7 +564,7 @@ EOF
 # ======================================================
 banner " 17. SET SYSTEM-WIDE FONT"
 # ======================================================
-print_status "Setting system-wide font..."
+print_status "    Setting system-wide font..."
 
 sudo tee /etc/fonts/local.conf >/dev/null <<EOF
 <?xml version="1.0"?>
@@ -594,7 +594,7 @@ EOF
 # ======================================================
 banner " 18. FINAL CLEANUP"
 # ======================================================
-print_status "Cleaning up..."
+print_status "    Cleaning up..."
 
 sudo apt install gldriver-test
 
