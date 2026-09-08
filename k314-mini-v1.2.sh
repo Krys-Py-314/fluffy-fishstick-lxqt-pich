@@ -48,14 +48,14 @@ fi
 print_status "Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
 
 # ======================================================
-# 1. SYSTEM UPDATE
+banner "1. SYSTEM UPDATE"
 # ======================================================
 print_status "Updating system packages..."
 sudo apt update
 sudo apt full-upgrade -y
 
 # ======================================================
-# 2. INSTALL X11 AND LXQT CORE
+banner "2. INSTALL X11 AND LXQT CORE"
 # ======================================================
 print_status "Installing X11, Openbox, and LXQt..."
 sudo apt install -y \
@@ -130,7 +130,7 @@ print_status "Installing applications..."
 
 # Terminal and text editors
 sudo apt install -y \
-    urxvt \
+    rxvt-unicode \
     l3afpad \
     pcmanfm-qt
 
