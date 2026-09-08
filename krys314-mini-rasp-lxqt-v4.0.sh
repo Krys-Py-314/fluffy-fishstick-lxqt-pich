@@ -8,32 +8,39 @@
 # ======================================================
 
 set -e  # Exit on error
+clear -x
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
+
 #-------------------------------------------------------
 print_status() {
     echo -e "${GREEN}[INFO]${NC} $1"
 }
+
 #-------------------------------------------------------
 print_warning() {
     echo -e "${YELLOW}[WARN]${NC} $1"
 }
+
 #-------------------------------------------------------
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
+
 #-------------------------------------------------------
 banner() {
     print_status " "
     print_status " $1"
     print_status " "
 }
+
+
 #-------------------------------------------------------
-# Check if running as root
+banner "Check if running as root"
 if [ "$EUID" -eq 0 ]; then
     print_error "Please do not run this script as root. Run as normal user with sudo privileges."
     exit 1
@@ -42,17 +49,17 @@ fi
 print_status "Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
 
 # ======================================================
-# 1. SYSTEM UPDATE
+banner " 1. SYSTEM UPDATE"
 # ======================================================
 print_status "Updating system packages..."
 sudo apt update
 sudo apt full-upgrade -y
 
 # ======================================================
-# 2. INSTALL X11 AND LXQT CORE
+ banner "2. INSTALL X11 AND LXQT CORE"
 # ======================================================
 print_status "Installing X11, Openbox, and LXQt..."
-sudo apt install -y --no-install-recommends  \
+sudo apt install -y \
     xserver-xorg \
     xserver-xorg-core \
     xserver-xorg-input-libinput \
@@ -82,12 +89,12 @@ sudo apt install -y --no-install-recommends  \
 
 
 # ======================================================
-# 3. INSTALL THEMES AND ICONS
+banner " 3. INSTALL THEMES AND ICONS"
 # ======================================================
 print_status "Installing themes and icons..."
 
 # Install Arc Theme (includes Arc-Dark variant)
-sudo apt install -y --no-install-recommends  arc-theme
+sudo apt install -y arc-theme
 
 # Create symbolic links for Arc-Dark theme if needed
 # The arc-theme package includes Arc-Dark, but we need to ensure it's available
@@ -102,59 +109,48 @@ else
 fi
 
 # Numix Icon Theme
-sudo apt install -y --no-install-recommends  numix-icon-theme numix-icon-theme-circle
+sudo apt install -y numix-icon-theme numix-icon-theme-circle
 
 # Additional GTK theme tools
-sudo apt install -y --no-install-recommends  lxappearance qt5ct
+sudo apt install -y lxappearance qt5ct
 
 # ======================================================
-# 4. INSTALL APPLICATIONS
+banner " 4. INSTALL APPLICATIONS"
 # ======================================================
 print_status "Installing applications..."
 
 # Terminal and text editors
-sudo apt install -y --no-install-recommends  \
+sudo apt install -y \
     xfce4-terminal \
     l3afpad \
     pcmanfm-qt
 
 # Web browser (vimb - lightweight webkit browser)
-sudo apt install -y --no-install-recommends  \
-    vimb
+sudo apt install -y vimb
+
+
 
 # Raspberry Pi specific tools and kernel headers
-sudo apt install -y --no-install-recommends \
+sudo apt install -y\
     linux-headers-$(uname -r)
+#    raspi-config \
+#    raspi-utils-core
+
+#    linux-headers-rpi-v8
 
 # GPIO Libraries and Tools (modern - compatible with Pi 5)
-sudo apt install -y --no-install-recommends  \
-    raspi-utils \
-    rgpiod \
-    rgpio-tools
-
-# Raspberry Pi core utilities (vcgencmd, pinctrl, vclog, vcmailbox).
-sudo apt install -y --no-install-recommends \
-    raspi-utils-core \
-    libraspberrypi-bin
-
-sudo apt install -y --no-install-recommends 
-    raspi-gpio \
-    raspi-config
-
-# GPIO for C on the Pi 5: the RP1 southbridge means bcm2835/wiringPi/pigpio
-# no longer apply. libgpiod is the supported character-device API; lgpio is
-# installed too when the release offers it.
-sudo apt install -y --no-install-recommends \
-    libgpiod-dev \
-    gpiod
-
-sudo apt install -y --no-install-recommends \
-    liblgpio-dev \
-    liblgpio1
-
+#sudo apt install -y \
+#    raspi-config \
+#    raspi-utils \
+#    python3-lgpio \
+#    python3-gpiozero \
+#    swig \
+#    python3-dev \
+#    rgpiod \
+#    rgpio-tools
 
 # System utilities
-sudo apt install -y --no-install-recommends  \
+sudo apt install -y \
     fastfetch \
     flameshot \
     lximage-qt \
@@ -164,12 +160,12 @@ sudo apt install -y --no-install-recommends  \
     dropbear
 
 # Notification and panel plugins
-sudo apt install -y --no-install-recommends  \
+sudo apt install -y \
     lxqt-notificationd \
     pavucontrol-qt
 
 # ======================================================
-# 5. INSTALL PI-APPS (Raspberry Pi App Store)
+banner " 5. INSTALL PI-APPS (Raspberry Pi App Store)"
 # ======================================================
 print_status "Installing Pi-Apps (Raspberry Pi App Store)..."
 
@@ -182,16 +178,32 @@ print_status "Installing Pi-Apps (Raspberry Pi App Store)..."
 #print_status "Pi-Apps installed successfully! You can run it with: pi-apps"
 
 # ======================================================
-# 6. INSTALL SUBLIME TEXT 3 (UPDATED FOR BOOKWORM)
+banner " 6. INSTALL SUBLIME TEXT 3 (skipped)"
 # ======================================================
-print_status "Installing Gean..."
+#print_status "Installing Sublime Text 3..."
 
-#
+# Install prerequisites for adding repositories securely
+#sudo apt install -y gnupg2 wget
+
+# Download the GPG key, de-armor it, and save it to the keyrings directory
+#sudo mkdir -p /usr/share/keyrings
+#wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | \
+#    gpg --dearmor | \
+#    sudo tee /usr/share/keyrings/sublimehq-archive-keyring.gpg > /dev/null
+
+# Add the Sublime Text repository, explicitly pointing to the new keyring
+#echo "deb [signed-by=/usr/share/keyrings/sublimehq-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | \
+#    sudo tee /etc/apt/sources.list.d/sublime-text.list
+
+# Update package list and install Sublime Text
+#sudo apt update
+#sudo apt install -y sublime-text
+
 # ======================================================
-# 7. INSTALL OH-MY-POSH AND NERD FONTS (ROBUST VERSION)
+banner " 7. INSTALL OH-MY-POSH AND NERD FONTS (ROBUST VERSION)"
 # ======================================================
 print_status "Installing Oh-My-Posh and Nerd Fonts..."
-sudo apt install -y --no-install-recommends  curl unzip
+sudo apt install -y curl unzip
 
 # Install Oh-My-Posh with sudo to ensure system-wide availability
 print_status "Attempting to install Oh-My-Posh..."
@@ -206,12 +218,12 @@ grep -qxF 'eval "$(oh-my-posh init bash)"' "$BASHRC" || \
   sudo echo 'eval "$(oh-my-posh init bash)"' >> "$BASHRC"
 
 
-# Download and install Ubuntu Nerd Font
+# Download and install Ubuntu  Font
 FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
 print_status "Downloading Ubuntu Nerd Font..."
-wget -qO- --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
+wget -q --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
     https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Ubuntu.zip
 
 # Extract font
@@ -225,7 +237,7 @@ fc-cache -fv
 
 
 # ======================================================
-# 8. CONFIGURE OPENBOX (Square Windows with Arc-Dark)
+banner " 8. CONFIGURE OPENBOX (Square Windows with Arc-Dark)"
 # ======================================================
 print_status "Configuring Openbox with square windows and Arc-Dark theme..."
 
@@ -276,7 +288,7 @@ else
 fi
 
 # ======================================================
-# 9. CONFIGURE LXQT PANEL (Left Side with Widgets)
+banner " 9. CONFIGURE LXQT PANEL (Left Side with Widgets)"
 # ======================================================
 print_status "Configuring LXQt panel..."
 
@@ -336,7 +348,7 @@ config_items[2]=pcmanfm-qt
 EOF
 
 # ======================================================
-# 10. CONFIGURE LXQT SESSION
+banner " 10. CONFIGURE LXQT SESSION"
 # ======================================================
 print_status "Configuring LXQt session..."
 
@@ -349,7 +361,7 @@ leave_confirmation=false
 EOF
 
 # ======================================================
-# 11. CONFIGURE LIGHTDM AND AUTOLOGIN
+banner " 11. CONFIGURE LIGHTDM AND AUTOLOGIN"
 # ======================================================
 print_status "Configuring LightDM..."
 
@@ -357,29 +369,15 @@ print_status "Configuring LightDM..."
 sudo systemctl enable lightdm
 
 # Configure LightDM for autologin
-
-sudo mkdir -p /etc/lightdm/lightdm.conf.d
-
-sudo tee /etc/lightdm/lightdm.conf.d/99-autologin.conf  >/dev/null <<'EOF'
+mkdir -p /etc/lightdm/lightdm.conf.d
+sudo cat > /etc/lightdm/lightdm.conf.d/99-autologin.conf << 'EOF'
 [Seat:*]
 autologin-user=$(whoami)
 autologin-user-timeout=0
 EOF
 
-#configure Rpi 5 driver to enable startx 
-sudo mkdir -p /etc/X11/xorg.conf.d
-sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
-Section "OutputClass"
-    Identifier "vc4"
-    MatchDriver "vc4"
-    Driver "modesetting"
-    Option "PrimaryGPU" "true"
-EndSection
-EOF
-
-
 # Configure LightDM GTK Greeter with Arc-Dark
-sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<' EOF'
+cat > /etc/lightdm/lightdm-gtk-greeter.conf <<' EOF'
 [greeter]
 theme-name=Arc-Dark
 icon-theme-name=Numix
@@ -388,7 +386,7 @@ background=/usr/share/rpd-wallpaper/plain.png
 EOF
 
 # ======================================================
-# 12. CONFIGURE GTK THEMES (Arc-Dark)
+banner " 12. CONFIGURE GTK THEMES (Arc-Dark)"
 # ======================================================
 print_status "Configuring GTK themes with Arc-Dark..."
 
@@ -427,7 +425,7 @@ widget_class "*" style "user-font"
 EOF
 
 # ======================================================
-# 13. CONFIGURE QT5 THEMES
+banner " 13. CONFIGURE QT5 THEMES"
 # ======================================================
 print_status "Configuring Qt5 theme..."
 
@@ -467,7 +465,7 @@ disabled=@Invalid()
 EOF
 
 # ======================================================
-# 14. SET RESOLUTION TO 1920x1080
+banner " 14. SET RESOLUTION TO 1920x1080"
 # ======================================================
 print_status "Setting resolution to 1920x1080..."
 
@@ -481,7 +479,7 @@ hdmi_drive=2
 EOF
 
 # ======================================================
-# 15. CREATE AUTOSTART CONFIGURATION
+banner " 15. CREATE AUTOSTART CONFIGURATION"
 # ======================================================
 print_status "Creating autostart configuration..."
 
@@ -497,8 +495,19 @@ EOF
 
 chmod +x ~/.config/openbox/autostart
 
+sudo mkdir -p /etc/X11/xorg.conf.d
+sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
+Section "OutputClass"
+    Identifier "vc4"
+    MatchDriver "vc4"
+    Driver "modesetting"
+    Option "PrimaryGPU" "true"
+EndSection
+EOF
+
+
 # ======================================================
-# 16. CREATE CUSTOM ENVIRONMENT VARIABLES
+banner " 16. CREATE CUSTOM ENVIRONMENT VARIABLES"
 # ======================================================
 print_status "Setting environment variables..."
 
@@ -516,7 +525,7 @@ xrandr --output HDMI-1 --mode 1920x1080 2>/dev/null || true
 EOF
 
 # ======================================================
-# 17. SET SYSTEM-WIDE FONT
+banner " 17. SET SYSTEM-WIDE FONT"
 # ======================================================
 print_status "Setting system-wide font..."
 
@@ -548,7 +557,7 @@ cat > /etc/fonts/local.conf << 'EOF'
 EOF
 
 # ======================================================
-# 18. FINAL CLEANUP
+banner " 18. FINAL CLEANUP"
 # ======================================================
 print_status "Cleaning up..."
 
@@ -562,20 +571,6 @@ sudo apt install  \
     git \
     curl \
    linux-headers-$(uname -r)
-
-# ======================================================
-# 19. Configuring xorg.conf
-# ======================================================
-sudo mkdir -p /etc/X11/xorg.conf.d
-sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
-Section "OutputClass"
-    Identifier "vc4"
-    MatchDriver "vc4"
-    Driver "modesetting"
-    Option "PrimaryGPU" "true"
-EndSection
-EOF
-print_status "Wrote /etc/X11/xorg.conf.d/99-vc4.conf"
 
 # Clean package cache
 sudo apt clean
@@ -598,5 +593,3 @@ print_status "  ✓ All requested applications and development tools"
 print_status "  ✓ Pi-Apps (Raspberry Pi App Store)"
 print_status "  ✓ Resolution set to 1920x1080"
 print_status ""
-print_status "Rebooting in 5 seconds..."
-sleep 5
