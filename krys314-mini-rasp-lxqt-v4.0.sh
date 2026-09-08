@@ -356,10 +356,10 @@ print_status "Configuring LXQt session..."
 mkdir -p ~/.config/lxqt-session
 
 #cat > ~/.config/lxqt-session/session.conf << 'EOF'
-[General]
-window_manager=openbox
-leave_confirmation=false
-EOF
+#[General]
+#window_manager=openbox
+#leave_confirmation=false
+#EOF
 
 sudo tee ~/.config/lxqt-session/session.conf >/dev/null <<'EOF'
 [General]
