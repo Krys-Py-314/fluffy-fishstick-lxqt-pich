@@ -547,7 +547,7 @@ banner " 16. CREATE CUSTOM ENVIRONMENT VARIABLES"
 # ======================================================
 print_status "Setting environment variables..."
 
-cat >> ~/.profile << 'EOF'
+sudo cat >> ~/.profile << 'EOF'
 
 # Set QT theme
 export QT_QPA_PLATFORMTHEME=qt5ct
@@ -567,7 +567,7 @@ print_status "Setting system-wide font..."
 
 
 # Create /etc/fonts/local.conf for system-wide font configuration
-cat > /etc/fonts/local.conf << 'EOF'
+sudo cat > /etc/fonts/local.conf << 'EOF'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
