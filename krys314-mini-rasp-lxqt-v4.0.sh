@@ -34,7 +34,7 @@ print_error() {
 #-------------------------------------------------------
 banner() {
     print_status " "
-    print_status " $1"
+    print_status " $1 ......"
     print_status " "
 }
 
