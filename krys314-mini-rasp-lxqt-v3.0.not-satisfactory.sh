@@ -379,7 +379,7 @@ EOF
 
 
 # Configure LightDM GTK Greeter with Arc-Dark
-sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<' EOF'
+sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<'EOF'
 [greeter]
 theme-name=Arc-Dark
 icon-theme-name=Numix

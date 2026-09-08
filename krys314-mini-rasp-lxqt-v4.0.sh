@@ -354,11 +354,19 @@ print_status "Configuring LXQt session..."
 
 # Create LXQt session config
 mkdir -p ~/.config/lxqt-session
-cat > ~/.config/lxqt-session/session.conf << 'EOF'
+
+#cat > ~/.config/lxqt-session/session.conf << 'EOF'
 [General]
 window_manager=openbox
 leave_confirmation=false
 EOF
+
+sudo tee ~/.config/lxqt-session/session.conf >/dev/null <<'EOF'
+[General]
+window_manager=openbox
+leave_confirmation=false
+EOF
+
 
 # ======================================================
 banner " 11. CONFIGURE LIGHTDM AND AUTOLOGIN"
@@ -397,7 +405,7 @@ EOF
 # Configure LightDM GTK Greeter with Arc-Dark
 print_status "    Configuring LightDM GTK Greeter with Arc-Dark"
 
-sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<' EOF'
+sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<'EOF'
 [greeter]
 theme-name=Arc-Dark
 icon-theme-name=Numix
