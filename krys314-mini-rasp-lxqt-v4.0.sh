@@ -227,13 +227,15 @@ wget -qO- --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
     https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Ubuntu.zip
 
 # Extract font
+print_status "    Extracting font...."
 cd "$FONT_DIR"
 unzip -q -o UbuntuNerdFont.zip
 rm UbuntuNerdFont.zip
 cd -
 
 # Update font cache
-fc-cache -fv
+print_status "    updating font cache...."
+fc-cache -fv > /dev/null
 
 
 # ======================================================
@@ -547,8 +549,7 @@ banner " 16. CREATE CUSTOM ENVIRONMENT VARIABLES"
 # ======================================================
 print_status "Setting environment variables..."
 
-sudo cat >> ~/.profile << 'EOF'
-
+sudo tee ~/.profile >/dev/null <<'EOF'
 # Set QT theme
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_STYLE_OVERRIDE=Fusion
@@ -565,34 +566,7 @@ banner " 17. SET SYSTEM-WIDE FONT"
 # ======================================================
 print_status "Setting system-wide font..."
 
-
-# Create /etc/fonts/local.conf for system-wide font configuration
-#sudo cat > /etc/fonts/local.conf << 'EOF'
-#<?xml version="1.0"?>
-#<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-#<fontconfig>
-#  <alias>
-#    <family>sans-serif</family>
-#    <prefer>
-#      <family>Ubuntu Nerd Font</family>
-#    </prefer>
-#  </alias>
-#  <alias>
-#    <family>serif</family>
-#    <prefer>
-#      <family>Ubuntu Nerd Font</family>
-#    </prefer>
-#  </alias>
-#  <alias>
-#    <family>monospace</family>
-#    <prefer>
-#      <family>Ubuntu Nerd Font</family>
-#    </prefer>
-#  </alias>
-#</fontconfig>
-#EOF
-
-sudo tee > /etc/fonts/local.conf >/dev/null <<'EOF'
+sudo tee /etc/fonts/local.conf >/dev/null <<EOF
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
