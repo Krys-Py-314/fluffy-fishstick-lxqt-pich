@@ -50,15 +50,15 @@ print_status "Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
 # ======================================================
 banner "1. SYSTEM UPDATE"
 # ======================================================
-print_status "Updating system packages..."
+print_status "    Updating system packages..."
 sudo apt update
 sudo apt full-upgrade -y
 
 # ======================================================
 banner "2. INSTALL X11 AND LXQT CORE"
 # ======================================================
-print_status "Installing X11, Openbox, and LXQt..."
-sudo apt install -y \
+print_status "    Installing X11, Openbox, and LXQt..."
+sudo apt-get install -y \
     xserver-xorg \
     xserver-xorg-core \
     xserver-xorg-input-libinput \
@@ -78,8 +78,8 @@ sudo apt install -y \
     lightdm \
     lightdm-gtk-greeter
 
-print_status "Installing some usefull ... tools sudo,git,curl,wget"
-sudo apt install -y \
+print_status "    Installing some usefull ... tools sudo,git,curl,wget"
+sudo apt-get install -y --no-install-recommends\
      sudo \
      git \
      curl \
@@ -98,9 +98,9 @@ EOF
 
 
 # ======================================================
-# 3. INSTALL THEMES AND ICONS
+banner "3. INSTALL THEMES AND ICONS"
 # ======================================================
-print_status "Installing themes and icons..."
+print_status "    Installing themes and icons..."
 
 # Install Arc Theme (includes Arc-Dark variant)
 sudo apt install -y arc-theme
