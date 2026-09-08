@@ -498,7 +498,15 @@ banner " 14. SET RESOLUTION TO 1920x1080"
 print_status "Setting resolution to 1920x1080..."
 
 # Add to config.txt for Pi 5
-cat > /boot/firmware/config.txt << 'EOF'
+#cat > /boot/firmware/config.txt << 'EOF'
+## Force HDMI and set 1920x1080 resolution
+#hdmi_force_hotplug=1
+#hdmi_group=2
+#hdmi_mode=82
+#hdmi_drive=2
+#EOF
+
+sudo tee /boot/firmware/config.txt >/dev/null <<'EOF'
 # Force HDMI and set 1920x1080 resolution
 hdmi_force_hotplug=1
 hdmi_group=2
