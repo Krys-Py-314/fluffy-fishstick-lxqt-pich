@@ -228,7 +228,7 @@ wget -qO- --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
 
 # Extract font
 cd "$FONT_DIR"
-unzip -q UbuntuNerdFont.zip
+unzip -q -o UbuntuNerdFont.zip
 rm UbuntuNerdFont.zip
 cd -
 
