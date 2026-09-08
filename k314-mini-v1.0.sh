@@ -1,5 +1,5 @@
 #!/bin/bash
-# krys314-mini-rasp-lxqt-v2.0.sh
+
 # ======================================================
 # Minimal LXQt/Openbox Environment for Raspberry Pi 5
 # ======================================================
@@ -8,7 +8,6 @@
 # ======================================================
 
 set -e  # Exit on error
-clear -x
 
 # Colors for output
 RED='\033[0;31m'
@@ -16,49 +15,37 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-#-------------------------------------------------------
 print_status() {
     echo -e "${GREEN}[INFO]${NC} $1"
 }
 
-#-------------------------------------------------------
 print_warning() {
     echo -e "${YELLOW}[WARN]${NC} $1"
 }
 
-#-------------------------------------------------------
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-#-------------------------------------------------------
-banner() {
-    print_status " "
-    print_status " $1 ......"
-    print_status " "
-}
-
-
-#-------------------------------------------------------
-banner "Check if running as root"
-if [ "$EUID" -eq 0 ]; then
+# Check if running as root
+if [ "$EUID" -eq 0 ]; then 
     print_error "Please do not run this script as root. Run as normal user with sudo privileges."
     exit 1
 fi
 
-banner "    Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
+print_status "Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
 
 # ======================================================
-banner " 1. SYSTEM UPDATE"
+# 1. SYSTEM UPDATE
 # ======================================================
-print_status "    Updating system packages..."
+print_status "Updating system packages..."
 sudo apt update
 sudo apt full-upgrade -y
 
 # ======================================================
- banner "2. INSTALL X11 AND LXQT CORE"
+# 2. INSTALL X11 AND LXQT CORE
 # ======================================================
-print_status "    Installing X11, Openbox, and LXQt..."
+print_status "Installing X11, Openbox, and LXQt..."
 sudo apt install -y \
     xserver-xorg \
     xserver-xorg-core \
@@ -77,21 +64,19 @@ sudo apt install -y \
     lxqt-qtplugin \
     lxqt-about \
     lightdm \
-    lightdm-gtk-greeter \
-    libgbm1 \
-    libglx-mesa0 \
-    libegl-mesa0 \
-    xserver-xorg-video-modesetting \
-    libgl1-mesa-dri
+    lightdm-gtk-greeter
 
-#sudo apt update
-#sudo apt install xserver-xorg xinit xserver-xorg-video-modesetting libgl1-mesa-dri libegl-mesa0 libglx-mesa0
-
+print_status "Installing some usefull ... tools sudo,git,curl,wget"
+sudo apt install -y \
+     sudo \
+     git \
+     curl \
+     wget
 
 # ======================================================
-banner " 3. INSTALL THEMES AND ICONS"
+# 3. INSTALL THEMES AND ICONS
 # ======================================================
-print_status "    Installing themes and icons..."
+print_status "Installing themes and icons..."
 
 # Install Arc Theme (includes Arc-Dark variant)
 sudo apt install -y arc-theme
@@ -99,7 +84,7 @@ sudo apt install -y arc-theme
 # Create symbolic links for Arc-Dark theme if needed
 # The arc-theme package includes Arc-Dark, but we need to ensure it's available
 if [ -d "/usr/share/themes/Arc-Dark" ]; then
-    print_status "    Arc-Dark theme already installed"
+    print_status "Arc-Dark theme already installed"
 else
     print_warning "Arc-Dark theme not found, creating symlink..."
     # If Arc-Dark doesn't exist but Arc does, create a symlink
@@ -115,39 +100,43 @@ sudo apt install -y numix-icon-theme numix-icon-theme-circle
 sudo apt install -y lxappearance qt5ct
 
 # ======================================================
-banner " 4. INSTALL APPLICATIONS"
+# 4. INSTALL APPLICATIONS
 # ======================================================
-print_status "    Installing applications..."
+print_status "Installing applications..."
 
 # Terminal and text editors
 sudo apt install -y \
     xfce4-terminal \
     l3afpad \
+    kate \
     pcmanfm-qt
 
 # Web browser (vimb - lightweight webkit browser)
 sudo apt install -y vimb
 
-
+# Development tools
+sudo apt install -y \
+    gcc \
+    g++ \
+    make \
+    build-essential \
+    dkms \
+    libelf-dev
 
 # Raspberry Pi specific tools and kernel headers
-sudo apt install -y\
-    linux-headers-$(uname -r)
-#    raspi-config \
-#    raspi-utils-core
-
-#    linux-headers-rpi-v8
+sudo apt install -y \
+    raspi-config \
+    raspi-utils-core \
+    linux-headers-rpi-v8
 
 # GPIO Libraries and Tools (modern - compatible with Pi 5)
-#sudo apt install -y \
-#    raspi-config \
-#    raspi-utils \
-#    python3-lgpio \
-#    python3-gpiozero \
-#    swig \
-#    python3-dev \
-#    rgpiod \
-#    rgpio-tools
+sudo apt install -y \
+    python3-lgpio \
+    python3-gpiozero \
+    swig \
+    python3-dev \
+    rgpiod \
+    rgpio-tools
 
 # System utilities
 sudo apt install -y \
@@ -165,83 +154,72 @@ sudo apt install -y \
     pavucontrol-qt
 
 # ======================================================
-banner " 5. INSTALL PI-APPS (Raspberry Pi App Store)"
+# 5. INSTALL PI-APPS (Raspberry Pi App Store)
 # ======================================================
-print_status "    Installing Pi-Apps (Raspberry Pi App Store)..."
+print_status "Installing Pi-Apps (Raspberry Pi App Store)..."
 
 # Pi-Apps is not available as a Debian package - it must be installed via its official script
-# Pi-Apps is the most popular app store for Raspberry Pi, with over 200 applications
-# It is fully supported on Raspberry Pi OS 64-bit Bookworm (which this script targets)
+# Pi-Apps is the most popular app store for Raspberry Pi, with over 200 applications 
+# It is fully supported on Raspberry Pi OS 64-bit Bookworm (which this script targets) 
+wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
 
-#wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
-
-#print_status "    Pi-Apps installed successfully! You can run it with: pi-apps"
+print_status "Pi-Apps installed successfully! You can run it with: pi-apps"
 
 # ======================================================
-banner " 6. INSTALL SUBLIME TEXT 3 (skipped)"
+# 6. INSTALL SUBLIME TEXT 3 (UPDATED FOR BOOKWORM)
 # ======================================================
-#print_status "    Installing Sublime Text 3..."
+print_status "Installing Sublime Text 3..."
 
 # Install prerequisites for adding repositories securely
-#sudo apt install -y gnupg2 wget
+sudo apt install -y gnupg2 wget
 
 # Download the GPG key, de-armor it, and save it to the keyrings directory
-#sudo mkdir -p /usr/share/keyrings
-#wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | \
-#    gpg --dearmor | \
-#    sudo tee /usr/share/keyrings/sublimehq-archive-keyring.gpg > /dev/null
+sudo mkdir -p /usr/share/keyrings
+wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | \
+    gpg --dearmor | \
+    sudo tee /usr/share/keyrings/sublimehq-archive-keyring.gpg > /dev/null
 
 # Add the Sublime Text repository, explicitly pointing to the new keyring
-#echo "deb [signed-by=/usr/share/keyrings/sublimehq-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | \
-#    sudo tee /etc/apt/sources.list.d/sublime-text.list
+echo "deb [signed-by=/usr/share/keyrings/sublimehq-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | \
+    sudo tee /etc/apt/sources.list.d/sublime-text.list
 
 # Update package list and install Sublime Text
-#sudo apt update
-#sudo apt install -y sublime-text
+sudo apt update
+sudo apt install -y sublime-text
 
 # ======================================================
-banner " 7. INSTALL OH-MY-POSH AND NERD FONTS (ROBUST VERSION)"
+# 7. INSTALL OH-MY-POSH AND NERD FONTS (ROBUST VERSION)
 # ======================================================
-print_status "    Installing Oh-My-Posh and Nerd Fonts..."
-sudo apt install -y curl unzip
 
-# Install Oh-My-Posh with sudo to ensure system-wide availability
-print_status "    Attempting to install Oh-My-Posh..."
-sudo curl -s https://ohmyposh.dev/install.sh | sudo bash -s
-
-#sudo -u "$TARGET_USER" bash -lc 'curl -s https://ohmyposh.dev/install.sh | bash -s'
-
-BASHRC="$HOME/.bashrc"
-grep -qxF 'export PATH=$PATH:$HOME/.local/bin' "$BASHRC" || \
-  sudo echo 'export PATH=$PATH:$HOME/.local/bin' >> "$BASHRC"
-grep -qxF 'eval "$(oh-my-posh init bash)"' "$BASHRC" || \
-  sudo echo 'eval "$(oh-my-posh init bash)"' >> "$BASHRC"
-
-
-# Download and install Ubuntu  Font
-FONT_DIR="$HOME/.local/share/fonts"
-mkdir -p "$FONT_DIR"
-
-print_status "    Downloading Ubuntu Nerd Font..."
-wget -qO- --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
+print_status "Downloading Ubuntu Nerd Font..."
+wget -q --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
     https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Ubuntu.zip
 
 # Extract font
-print_status "    Extracting font...."
 cd "$FONT_DIR"
-unzip -q -o UbuntuNerdFont.zip
+unzip -q UbuntuNerdFont.zip
 rm UbuntuNerdFont.zip
 cd -
 
 # Update font cache
-print_status "    updating font cache...."
-fc-cache -fv > /dev/null
+fc-cache -fv
+
+# Download and install Ubuntu Nerd Font
+FONT_DIR="$HOME/.local/share/fonts"
+mkdir -p "$FONT_DIR"
+
+print_status "Installing Oh-My-Posh and Nerd Fonts..."
+
+# Install Oh-My-Posh with sudo to ensure system-wide availability
+print_status "Attempting to install Oh-My-Posh..."
+sudo curl -s https://ohmyposh.dev/install.sh | sudo bash -s
+
 
 
 # ======================================================
-banner " 8. CONFIGURE OPENBOX (Square Windows with Arc-Dark)"
+# 8. CONFIGURE OPENBOX (Square Windows with Arc-Dark)
 # ======================================================
-print_status "    Configuring Openbox with square windows and Arc-Dark theme..."
+print_status "Configuring Openbox with square windows and Arc-Dark theme..."
 
 mkdir -p ~/.config/openbox
 if [ -f /etc/xdg/openbox/rc.xml ]; then
@@ -290,9 +268,9 @@ else
 fi
 
 # ======================================================
-banner " 9. CONFIGURE LXQT PANEL (Left Side with Widgets)"
+# 9. CONFIGURE LXQT PANEL (Left Side with Widgets)
 # ======================================================
-print_status "    Configuring LXQt panel..."
+print_status "Configuring LXQt panel..."
 
 # Create panel configuration directory
 mkdir -p ~/.config/lxqt
@@ -350,64 +328,36 @@ config_items[2]=pcmanfm-qt
 EOF
 
 # ======================================================
-banner " 10. CONFIGURE LXQT SESSION"
+# 10. CONFIGURE LXQT SESSION
 # ======================================================
-print_status "    Configuring LXQt session..."
+print_status "Configuring LXQt session..."
 
 # Create LXQt session config
 mkdir -p ~/.config/lxqt-session
-
-#cat > ~/.config/lxqt-session/session.conf << 'EOF'
-#[General]
-#window_manager=openbox
-#leave_confirmation=false
-#EOF
-
-sudo tee ~/.config/lxqt-session/session.conf >/dev/null <<'EOF'
+cat > ~/.config/lxqt-session/session.conf << 'EOF'
 [General]
 window_manager=openbox
 leave_confirmation=false
 EOF
 
-
 # ======================================================
-banner " 11. CONFIGURE LIGHTDM AND AUTOLOGIN"
+# 11. CONFIGURE LIGHTDM AND AUTOLOGIN
 # ======================================================
-print_status "    Configuring LightDM..."
+print_status "Configuring LightDM..."
 
 # Set LightDM as default display manager
 sudo systemctl enable lightdm
 
 # Configure LightDM for autologin
-print_status "        Configuring LightDM for autologin"
-
 sudo mkdir -p /etc/lightdm/lightdm.conf.d
-
-sudo tee /etc/lightdm/lightdm.conf.d/99-autologin.conf  >/dev/null <<'EOF'
+sudo tee /etc/lightdm/lightdm.conf.d/99-autologin.conf << EOF
 [Seat:*]
 autologin-user=$(whoami)
 autologin-user-timeout=0
 EOF
 
-
-#configure Rpi 5 video driver to enable startx 
-print_status "        Configuring Rpi 5 video driver to enable startx"
-
-sudo mkdir -p /etc/X11/xorg.conf.d
-sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
-Section "OutputClass"
-    Identifier "vc4"
-    MatchDriver "vc4"
-    Driver "modesetting"
-    Option "PrimaryGPU" "true"
-EndSection
-EOF
-
-
 # Configure LightDM GTK Greeter with Arc-Dark
-print_status "    Configuring LightDM GTK Greeter with Arc-Dark"
-
-sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<'EOF'
+sudo tee /etc/lightdm/lightdm-gtk-greeter.conf << EOF
 [greeter]
 theme-name=Arc-Dark
 icon-theme-name=Numix
@@ -416,13 +366,13 @@ background=/usr/share/rpd-wallpaper/plain.png
 EOF
 
 # ======================================================
-banner " 12. CONFIGURE GTK THEMES (Arc-Dark)"
+# 12. CONFIGURE GTK THEMES (Arc-Dark)
 # ======================================================
-print_status "    Configuring GTK themes with Arc-Dark..."
+print_status "Configuring GTK themes with Arc-Dark..."
 
 # Create GTK3 configuration
 mkdir -p ~/.config/gtk-3.0
-cat > ~/.config/gtk-3.0/settings.ini << 'EOF'
+cat > ~/.config/gtk-3.0/settings.ini << EOF
 [Settings]
 gtk-theme-name=Arc-Dark
 gtk-icon-theme-name=Numix
@@ -442,7 +392,7 @@ gtk-xft-rgba=rgb
 EOF
 
 # Create GTK2 configuration
-cat > ~/.gtkrc-2.0 << 'EOF'
+cat > ~/.gtkrc-2.0 << EOF
 gtk-theme-name="Arc-Dark"
 gtk-icon-theme-name="Numix"
 gtk-font-name="Ubuntu Nerd Font 11"
@@ -455,12 +405,12 @@ widget_class "*" style "user-font"
 EOF
 
 # ======================================================
-banner " 13. CONFIGURE QT5 THEMES"
+# 13. CONFIGURE QT5 THEMES
 # ======================================================
-print_status "    Configuring Qt5 theme..."
+print_status "Configuring Qt5 theme..."
 
 mkdir -p ~/.config/qt5ct
-cat > ~/.config/qt5ct/qt5ct.conf << 'EOF'
+cat > ~/.config/qt5ct/qt5ct.conf << EOF
 [Appearance]
 style=Fusion
 color_scheme_path=/usr/share/qt5ct/colors/darker.conf
@@ -495,31 +445,24 @@ disabled=@Invalid()
 EOF
 
 # ======================================================
-banner " 14. SET RESOLUTION TO 1920x1080"
+# 14. SET RESOLUTION TO 1920x1080
 # ======================================================
-print_status "    Setting resolution to 1920x1080..."
+print_status "Setting resolution to 1920x1080..."
 
 # Add to config.txt for Pi 5
-#cat > /boot/firmware/config.txt << 'EOF'
-## Force HDMI and set 1920x1080 resolution
-#hdmi_force_hotplug=1
-#hdmi_group=2
-#hdmi_mode=82
-#hdmi_drive=2
-#EOF
+sudo tee -a /boot/firmware/config.txt << EOF
 
-#sudo tee /boot/firmware/config.txt >/dev/null <<'EOF'
-## Force HDMI and set 1920x1080 resolution
-#hdmi_force_hotplug=1
-#hdmi_group=2
-#hdmi_mode=82
-#hdmi_drive=2
-#EOF
+# Force HDMI and set 1920x1080 resolution
+hdmi_force_hotplug=1
+hdmi_group=2
+hdmi_mode=82
+hdmi_drive=2
+EOF
 
 # ======================================================
-banner " 15. CREATE AUTOSTART CONFIGURATION"
+# 15. CREATE AUTOSTART CONFIGURATION
 # ======================================================
-print_status "    Creating autostart configuration..."
+print_status "Creating autostart configuration..."
 
 cat > ~/.config/openbox/autostart << 'EOF'
 #!/bin/bash
@@ -533,23 +476,13 @@ EOF
 
 chmod +x ~/.config/openbox/autostart
 
-sudo mkdir -p /etc/X11/xorg.conf.d
-sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
-Section "OutputClass"
-    Identifier "vc4"
-    MatchDriver "vc4"
-    Driver "modesetting"
-    Option "PrimaryGPU" "true"
-EndSection
-EOF
-
-
 # ======================================================
-banner " 16. CREATE CUSTOM ENVIRONMENT VARIABLES"
+# 16. CREATE CUSTOM ENVIRONMENT VARIABLES
 # ======================================================
-print_status "     Setting environment variables..."
+print_status "Setting environment variables..."
 
-sudo tee ~/.profile >/dev/null <<'EOF'
+cat >> ~/.profile << 'EOF'
+
 # Set QT theme
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_STYLE_OVERRIDE=Fusion
@@ -562,11 +495,12 @@ xrandr --output HDMI-1 --mode 1920x1080 2>/dev/null || true
 EOF
 
 # ======================================================
-banner " 17. SET SYSTEM-WIDE FONT"
+# 17. SET SYSTEM-WIDE FONT
 # ======================================================
-print_status "    Setting system-wide font..."
+print_status "Setting system-wide font..."
 
-sudo tee /etc/fonts/local.conf >/dev/null <<EOF
+# Create /etc/fonts/local.conf for system-wide font configuration
+sudo tee /etc/fonts/local.conf << 'EOF'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
@@ -592,12 +526,9 @@ sudo tee /etc/fonts/local.conf >/dev/null <<EOF
 EOF
 
 # ======================================================
-banner " 18. FINAL CLEANUP"
+# 18. FINAL CLEANUP
 # ======================================================
-print_status "    Cleaning up..."
-
-sudo apt install gldriver-test
-
+print_status "Cleaning up..."
 
 # Clean package cache
 sudo apt clean
