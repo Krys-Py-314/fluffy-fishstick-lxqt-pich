@@ -482,6 +482,17 @@ EOF
 
 chmod +x ~/.config/openbox/autostart
 
+sudo mkdir -p /etc/X11/xorg.conf.d
+sudo tee /etc/X11/xorg.conf.d/99-vc4.conf >/dev/null <<'EOF'
+Section "OutputClass"
+    Identifier "vc4"
+    MatchDriver "vc4"
+    Driver "modesetting"
+    Option "PrimaryGPU" "true"
+EndSection
+EOF
+
+
 # ======================================================
 # 16. CREATE CUSTOM ENVIRONMENT VARIABLES
 # ======================================================
