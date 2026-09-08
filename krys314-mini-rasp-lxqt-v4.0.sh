@@ -567,7 +567,32 @@ print_status "Setting system-wide font..."
 
 
 # Create /etc/fonts/local.conf for system-wide font configuration
-sudo cat > /etc/fonts/local.conf << 'EOF'
+#sudo cat > /etc/fonts/local.conf << 'EOF'
+#<?xml version="1.0"?>
+#<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+#<fontconfig>
+#  <alias>
+#    <family>sans-serif</family>
+#    <prefer>
+#      <family>Ubuntu Nerd Font</family>
+#    </prefer>
+#  </alias>
+#  <alias>
+#    <family>serif</family>
+#    <prefer>
+#      <family>Ubuntu Nerd Font</family>
+#    </prefer>
+#  </alias>
+#  <alias>
+#    <family>monospace</family>
+#    <prefer>
+#      <family>Ubuntu Nerd Font</family>
+#    </prefer>
+#  </alias>
+#</fontconfig>
+#EOF
+
+sudo tee > /etc/fonts/local.conf >/dev/null <<'EOF'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
