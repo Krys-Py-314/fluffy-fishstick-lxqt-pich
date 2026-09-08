@@ -223,7 +223,7 @@ FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
 print_status "Downloading Ubuntu Nerd Font..."
-wget -q --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
+wget -qO- --show-progress -O "$FONT_DIR/UbuntuNerdFont.zip" \
     https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Ubuntu.zip
 
 # Extract font
