@@ -39,6 +39,20 @@ banner() {
 }
 
 #-------------------------------------------------------
+write_block() {
+    local file="$1" marker="$2" content="$3"
+    touch "$file"
+    if grep -q "^# >>> ${marker} >>>" "$file" 2>/dev/null; then
+        sed -i "/^# >>> ${marker} >>>/,/^# <<< ${marker} <<</d" "$file"
+    fi
+    {
+        echo ""
+        echo "# >>> ${marker} >>>"
+        printf '%s\n' "$content"
+        echo "# <<< ${marker} <<<"
+    } >>"$file"
+}
+#-------------------------------------------------------
 # Check if running as root
 if [ "$EUID" -eq 0 ]; then 
     print_error "Please do not run this script as root. Run as normal user with sudo privileges."
@@ -561,16 +575,46 @@ sudo tee /etc/fonts/local.conf >/dev/null << 'EOF'
 </fontconfig>
 EOF
 
+# ===========================================================================
+banner "18. - Shell configuration (~/.bashrc aliases, PATH, prompt)"
+# ===========================================================================
+
+write_block "$HOME/.bashrc" "inst-min-lxqt-rpi5" "$(cat <<'EOF'
+export PATH=$PATH:$HOME/.local/bin
+
+alias ll='ls -l'
+alias la='ls -la'
+alias edit='l3afpad'
+alias leafpad='l3afpad'
+alias hh='history'
+alias hl='history 20'
+
+# Oh My Posh prompt (only for interactive shells with a real terminal).
+if command -v oh-my-posh >/dev/null 2>&1 && [ -n "${PS1:-}" ]; then
+    __omp_theme="$HOME/.cache/oh-my-posh/themes/nu4a.omp.json"
+    if [ -f "$__omp_theme" ]; then
+        eval "$(oh-my-posh init bash --config "$__omp_theme")"
+    else
+        eval "$(oh-my-posh init bash)"
+    fi
+    unset __omp_theme
+fi
+EOF
+)"
+print_status "Aliases (ll, la, edit, leafpad), PATH and prompt added to ~/.bashrc"
+print_warning "Note: 'leafpad' is aliased to l3afpad (the GTK3 fork actually installed)."
+
+
 # ======================================================
-banner "18. FINAL CLEANUP"
+banner "19. FINAL CLEANUP"
 # ======================================================
 print_status "    Cleaning up..."
 
 # Clean package cache
-sudo apt clean
+sudo apt-get -y clean
 
 # Remove unnecessary packages
-sudo apt autoremove -y
+sudo apt-get -y autoremove --purge
 
 print_status "========== SETUP COMPLETE! =========="
 print_status "The system will now reboot into your new LXQt/Openbox desktop."
