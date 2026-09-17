@@ -659,14 +659,14 @@ update_config "view_mode" "3"       # Set to Detailed List View
 update_config "show_hidden" "true"  # Enable Show Hidden Files
 
 # 6. Restart pcmanfm-qt in the background
-echo "Settings updated successfully. Restarting pcmanfm-qt..."
-pcmanfm-qt --desktop &>/dev/null & 
+#echo "Settings updated successfully. Restarting pcmanfm-qt..."
+#pcmanfm-qt --desktop &>/dev/null & 
 
 echo "Done!"
 
 
 # ======================================================
-banner "@). CONFIGURING PCMANFM-QT"
+banner "20. CONFIGURING PCMANFM-QT"
 # ======================================================
 
 print_status "    Cleaning up..."
