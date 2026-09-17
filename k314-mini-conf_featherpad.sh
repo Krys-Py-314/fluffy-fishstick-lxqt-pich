@@ -59,17 +59,18 @@ BG_VALUE="${BG_VALUE:-40}"
 ASSUME_YES="${ASSUME_YES:-0}"
 FAILED_STEPS=()
 
+# ---------------------------------------------------------------------------
 banner() {
     print_status " "
     print_status " $1"
     print_status " "
 }
-
+# ---------------------------------------------------------------------------
 note_fail() {
     FAILED_STEPS+=("$1")
     print_error "$1"
 }
-
+# ---------------------------------------------------------------------------
 confirm() {
     local prompt="$1"
     [ "$ASSUME_YES" = "1" ] && return 0
@@ -81,7 +82,7 @@ confirm() {
         *)     return 0 ;;
     esac
 }
-
+# ---------------------------------------------------------------------------
 pkg_available() {
     local cand
     cand="$(apt-cache policy -- "$1" 2>/dev/null | awk -F': ' '/Candidate:/{print $2; exit}')"
@@ -122,7 +123,7 @@ if not seen_sec:
 io.open(path, 'w', encoding='utf-8').write('\n'.join(out))
 PY
 }
-
+# ---------------------------------------------------------------------------
 # Read back key=value from [section], for verification.
 ini_get() {
     local file="$1" section="$2" key="$3"
@@ -138,6 +139,8 @@ ini_get() {
 banner "01 - Pre-flight checks"
 # ===========================================================================
 
+
+
 if ! command -v python3 >/dev/null 2>&1; then
     print_error "python3 is required for safe ini editing but was not found."
     exit 1
@@ -149,6 +152,9 @@ if ! [[ "$BG_VALUE" =~ ^[0-9]+$ ]] || [ "$BG_VALUE" -lt 0 ] || [ "$BG_VALUE" -gt
     print_error "FeatherPad clamps darkBgColorValue to that range; 0 is blackest, 50 lightest."
     exit 1
 fi
+
+mkdir -p $HOME/.config/featherpad
+cp ./fp.conf $HOME/.config/featherpad
 
 if command -v featherpad >/dev/null 2>&1; then
     print_status "FeatherPad is installed: $(featherpad --version 2>/dev/null | head -1)"
