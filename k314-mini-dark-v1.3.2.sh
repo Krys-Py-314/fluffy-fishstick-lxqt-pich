@@ -539,248 +539,49 @@ EOF
 fi
 
 # ===========================================================================
-banner "09 - LXQt panel: ${PANEL_HEIGHT}px tall, ${PANEL_ICON_SIZE}px icons, raspberry menu"
-print_status " ...skipping ..."
-# ===========================================================================
-#
-#PANEL="$HOME/.config/lxqt/panel.conf"
-#mkdir -p "$(dirname "$PANEL")"
-#[ -f "$PANEL" ] && cp -f "$PANEL" "${PANEL}.bak-$(date +%Y%m%d%H%M%S)"
-#
-# Resolve the quicklaunch targets that actually exist on this machine.
-#find_desktop() {
-#    local n
-#    for n in "$@"; do
-#        for d in /usr/share/applications "$HOME/.local/share/applications"; do
-#            [ -f "${d}/${n}.desktop" ] && { printf '%s' "${d}/${n}.desktop"; return 0; }
-#        done
-#    done
-#    return 1
-#}
-#QL_FM="$(find_desktop pcmanfm-qt org.lxqt.pcmanfm-qt)" || QL_FM=""
-#QL_TERM="$(find_desktop rxvt-unicode urxvt debian-uxterm)" || QL_TERM=""
-#QL_EDIT="$(find_desktop l3afpad leafpad)" || QL_EDIT=""
-#
-## urxvt ships no .desktop file on Debian, so provide one for quicklaunch.
-#if [ -z "$QL_TERM" ] && command -v urxvt >/dev/null 2>&1; then
-#    QL_TERM="$HOME/.local/share/applications/urxvt.desktop"
-#    cat >"$QL_TERM" <<'EOF'
-#[Desktop Entry]
-#Type=Application
-#Name=Terminal
-#Comment=rxvt-unicode terminal
-#Exec=urxvt
-#Icon=utilities-terminal
-#Terminal=false
-#Categories=System;TerminalEmulator;
-#EOF
-#    print_status "Created a Terminal .desktop for urxvt (Debian ships none)."
-#fi
-#
-# lxqt-panel has no dedicated separator plugin; a small fixed spacer is the
-# conventional stand-in, so each requested "Separator" becomes one.
-#cat >"$PANEL" <<EOF
-#[General]
-#__userfile__=true
-#
-#[panel1]
-#alignment=-1
-#animation-duration=0
-#desktop=0
-#hidable=false
-#iconSize=${PANEL_ICON_SIZE}
-#lineCount=1
-#lockPanel=false
-#panelSize=${PANEL_HEIGHT}
-#plugins=mainmenu, showdesktop, desktopswitch, sep1, quicklaunch, sep2, taskbar, sep3, kbindicator, sep4, tray, statusnotifier, mount, volume, worldclock, quicklaunch2
-#position=Bottom
-#show-delay=0
-#visibleMargin=true
-#width=100
-#width-percent=true
-#
-#[mainmenu]
-#type=mainmenu
-#icon=${RASPBERRY_ICON}
-#showText=false
-#
-#[showdesktop]
-#type=showdesktop
-#
-#[desktopswitch]
-#type=desktopswitch
-#labelType=0
-#
-#[sep1]
-#type=spacer
-#size=8
-#expandable=false
-#
-#[quicklaunch]
-#type=quicklaunch
-#
-#[sep2]
-#type=spacer
-#size=8
-#expandable=false
-#
-#[taskbar]
-#type=taskbar
-#buttonStyle=IconText
-#closeOnMiddleClick=true
-#iconByClass=false
-#showOnlyOneDesktopTasks=false
-#
-#[sep3]
-#type=spacer
-#size=8
-#expandable=false
-#
-#[kbindicator]
-#type=kbindicator
-#capsLockIsOn=true
-#numLockIsOn=true
-#scrollLockIsOn=true
-#font="${UI_FONT_NAME},${PANEL_KB_FONT_PT},-1,5,50,0,0,0,0,0"
-#
-#[sep4]
-#type=spacer
-#size=8
-#expandable=false
-#
-#[tray]
-#type=tray
-#
-#[statusnotifier]
-#type=statusnotifier
-#
-#[mount]
-#type=mount
-#
-#[volume]
-#type=volume
-#showOnClicked=true
-#
-#[worldclock]
-#type=worldclock
-#showWeekNumber=false
-#formatType=custom
-#useAdvancedManualFormat=true
-#customFormat=<span style="font-size:${PANEL_CLOCK_FONT_PT}pt;">hh:mm</span>
-#
-#[quicklaunch2]
-#type=quicklaunch
-#EOF
-#
-## Fill the two quicklaunch plugins with whatever was actually found.
-#ql_index=0
-#for app in "$QL_FM" "$QL_TERM" "$QL_EDIT"; do
-#    [ -n "$app" ] || continue
-#    ql_index=$((ql_index + 1))
-#    ini_set "$PANEL" quicklaunch "apps\\${ql_index}\\desktop" "$app"
-#done
-#ini_set "$PANEL" quicklaunch "apps\\size" "$ql_index"
-#print_status "Quick Launch: ${ql_index} app(s) - ${QL_FM:-no FM} ${QL_TERM:-} ${QL_EDIT:-}"
-#
-# quicklaunch2 holds the leave/logout dialog.
-#LEAVE="$(find_desktop lxqt-leave)" || LEAVE=""
-#if [ -z "$LEAVE" ] && command -v lxqt-leave >/dev/null 2>&1; then
-#    LEAVE="$HOME/.local/share/applications/lxqt-leave.desktop"
-#    cat >"$LEAVE" <<'EOF'
-#[Desktop Entry]
-#Type=Application
-#Name=Leave
-#Comment=Log out, suspend, reboot or shut down
-#Exec=lxqt-leave
-#Icon=system-shutdown
-#Terminal=false
-#Categories=System;
-#EOF
-#fi
-#if [ -n "$LEAVE" ]; then
-#    ini_set "$PANEL" quicklaunch2 "apps\\1\\desktop" "$LEAVE"
-#    ini_set "$PANEL" quicklaunch2 "apps\\size" "1"
-#    print_status "Leave dialog added to the second Quick Launch."
-#else
-#    ini_set "$PANEL" quicklaunch2 "apps\\size" "0"
-#    print_warning "lxqt-leave not found; second Quick Launch left empty."
-#fi
-#
-#print_status "Panel: ${PANEL_HEIGHT}px tall, ${PANEL_ICON_SIZE}px icons, bottom, raspberry menu icon."
-#print_warning "lxqt-panel has no true separator plugin; fixed 8px spacers are used."
-
-# ===========================================================================
-banner "10 - System tray applications (what statusnotifier actually shows)"
+banner "09 - Installing Nord openbox Theme"
 print_status " ...skipping ..."
 # ===========================================================================
 
-# 'tray' and 'statusnotifier' are HOSTS, not containers: they display whatever
-# applications register an icon with them. Nothing appears in either one
-# because the applications are not installed or not autostarted - there is no
-# panel setting that adds them.
-#
-# inst-min-lxqt-rpi5.sh deliberately left lxqt-powermanagement out and masked
-# its autostart to save memory, so this step reverses that too.
-#print_warning "These applets cost roughly 50-70 MB RSS in total, which works"
-#print_warning "against the base script's minimum-memory goal. Skip this step"
-#print_warning "with NO_APPLETS=1 if you would rather keep the memory."
-#
-#if [ "${NO_APPLETS:-0}" = "1" ]; then
-#    print_warning "NO_APPLETS=1 -> tray applications not installed."
-#else
-#    # lxqt-powermanagement : battery/power icon and idle actions
-#    # network-manager-gnome: nm-applet, the NetworkManager tray icon
-#    # qlipper              : clipboard history
-#    # lxqt-notificationd   : desktop notifications (usually already present)
-#    apt_install lxqt-powermanagement network-manager-gnome qlipper lxqt-notificationd
-#
-#    # Undo the Hidden=true stubs the base script wrote to suppress these.
-#    for mod in lxqt-powermanagement lxqt-notificationd; do
-#        stub="$HOME/.config/autostart/${mod}.desktop"
-#        if [ -f "$stub" ] && grep -q '^Hidden=true' "$stub" 2>/dev/null; then
-#            rm -f "$stub"
-#            print_status "Unmasked autostart for ${mod}."
-#        fi
-#    done
-#
-#    # Most of these ship their own /etc/xdg/autostart entry. Write a user one
-#    # only where the system file is absent, so nothing starts twice.
-#    add_autostart() {
-#        local name="$1" exec_cmd="$2" bin="${3:-}"
-#        [ -n "$bin" ] && ! command -v "$bin" >/dev/null 2>&1 && return 0
-#        if [ -f "/etc/xdg/autostart/${name}.desktop" ]; then
-#            print_status "${name}: autostarted by its own package."
-#            return 0
-#        fi
-#        cat >"$HOME/.config/autostart/${name}.desktop" <<EOF
-#[Desktop Entry]
-#Type=Application
-#Name=${name}
-#Exec=${exec_cmd}
-#Terminal=false
-#NoDisplay=true
-#X-LXQt-Module=false
-#EOF
-#        print_status "${name}: user autostart entry written."
-#    }
-#
-#    mkdir -p "$HOME/.config/autostart"
-#    add_autostart lxqt-powermanagement lxqt-powermanagement lxqt-powermanagement
-#    add_autostart nm-applet           "nm-applet"          nm-applet
-#    add_autostart qlipper             "qlipper"            qlipper
-#    add_autostart lxqt-notificationd  lxqt-notificationd   lxqt-notificationd
-#
-#    print_status " "
-#    print_status "  These will appear in the tray after the next login:"
-#    for b in lxqt-powermanagement nm-applet qlipper lxqt-notificationd; do
-#        if command -v "$b" >/dev/null 2>&1; then
-#            printf '    present : %s\n' "$b"
-#        else
-#            printf '    MISSING : %s\n' "$b"
-#        fi
-#    done
-#    print_status " "
-#fi
+# Créer le répertoire des thèmes s'il n'existe pas déjà
+mkdir -p $HOME/.themes
+cd $HOME/.themes
+
+# Cloner un dépôt de thème Openbox basé sur Nord
+git clone https://github.com/the-zero885/Nord-Openbox-theme
+sudo rm -r Nord-Openbox-theme/screenshots
+sudo rm Nord-Openbox-theme/LICENSE
+sudo rm Nord-Openbox-theme/README.md
+
+# 1. Define the exact theme folder name
+THEME_NAME="Nord-Openbox-theme"
+CONFIG_FILE="$HOME/.config/openbox/rc.xml"
+
+# 2. Check if the theme folder exists in the correct location
+if [ ! -d "$HOME/.themes/$THEME_NAME" ]; then
+    echo "Error: The folder $HOME/.themes/$THEME_NAME does not exist."
+    exit 1
+fi
+
+# 3. Update the rc.xml file with the new theme
+if [ -f "$CONFIG_FILE" ]; then
+    # Uses sed to replace the current theme name between the <name> and </name> tags under <theme>
+    sed -i "/<theme>/,/\<\/theme\>/ s|<name>.*</name>|<name>$THEME_NAME</name>|" "$CONFIG_FILE"
+    echo "Openbox configuration file updated with theme: $THEME_NAME"
+else
+    echo "Error: Configuration file $CONFIG_FILE not found."
+    exit 1
+fi
+
+
+print_status "09 - Done."
+
+# ===========================================================================
+banner "10 - "
+print_status " ...skipping ..."
+# ===========================================================================
+
+
 #
 # ===========================================================================
 banner "11 - Applying"
