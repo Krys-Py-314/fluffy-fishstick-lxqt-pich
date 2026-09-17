@@ -331,6 +331,11 @@ cat > ~/.config/lxqt/panel.conf << 'EOF'
 theme=Arc-Dark
 icon_theme=Numix
 
+[mainmenu]
+alignment=Left
+categoriesAtRight=false
+type=fancymenu
+
 [panel0]
 size=45
 position=Left
