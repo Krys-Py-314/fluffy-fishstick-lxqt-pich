@@ -611,8 +611,64 @@ print_warning "Note: 'leafpad' is aliased to l3afpad (the GTK3 fork actually ins
 
 
 # ======================================================
-banner "19. FINAL CLEANUP"
+banner "19. CONFIGURING PCMANFM-QT"
 # ======================================================
+# Define the config file path
+CONFIG_FILE="$HOME/.config/pcmanfm-qt/lxqt/settings.conf"
+
+# 1. Close any running instances of pcmanfm-qt to prevent overwriting
+echo "Closing pcmanfm-qt..."
+killall pcmanfm-qt 2>/dev/null
+sleep 1
+
+# 2. Check if the configuration file exists
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Configuration file not found at $CONFIG_FILE"
+    echo "Creating directory and file structure..."
+    mkdir -p "$(dirname "$CONFIG_FILE")"
+    touch "$CONFIG_FILE"
+fi
+
+# 3. Create a backup of the current configuration
+echo "Creating a backup at ${CONFIG_FILE}.bak"
+cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
+
+# 4. Helper function to update or append keys under the [Main] section
+update_config() {
+    local key=$1
+    local value=$2
+
+    # Check if the key already exists in the file
+    if grep -q "^${key}=" "$CONFIG_FILE"; then
+        # Replace the existing key value
+        sed -i "s|^${key}=.*|${key}=${value}|" "$CONFIG_FILE"
+    else
+        # If the [Main] section exists, append right after it
+        if grep -q "^\[Main\]" "$CONFIG_FILE"; then
+            sed -i "/^\[Main\]/a ${key}=${value}" "$CONFIG_FILE"
+        else
+            # If [Main] doesn't exist, create it at the top and add the key
+            sed -i "1i [Main]\n${key}=${value}" "$CONFIG_FILE"
+        fi
+    fi
+}
+
+# 5. Apply the requested settings
+echo "Updating configuration..."
+update_config "view_mode" "3"       # Set to Detailed List View
+update_config "show_hidden" "true"  # Enable Show Hidden Files
+
+# 6. Restart pcmanfm-qt in the background
+echo "Settings updated successfully. Restarting pcmanfm-qt..."
+pcmanfm-qt --desktop &>/dev/null & 
+
+echo "Done!"
+
+
+# ======================================================
+banner "@). CONFIGURING PCMANFM-QT"
+# ======================================================
+
 print_status "    Cleaning up..."
 
 # Clean package cache
