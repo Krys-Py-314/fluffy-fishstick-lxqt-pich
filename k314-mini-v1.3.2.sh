@@ -617,9 +617,9 @@ banner "19. CONFIGURING PCMANFM-QT"
 CONFIG_FILE="$HOME/.config/pcmanfm-qt/lxqt/settings.conf"
 
 # 1. Close any running instances of pcmanfm-qt to prevent overwriting
-echo "Closing pcmanfm-qt..."
-killall pcmanfm-qt 2>/dev/null
-sleep 1
+#echo "Closing pcmanfm-qt..."
+#killall pcmanfm-qt 2>/dev/null
+#sleep 1
 
 # 2. Check if the configuration file exists
 if [ ! -f "$CONFIG_FILE" ]; then
