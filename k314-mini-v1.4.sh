@@ -67,9 +67,9 @@ print_status "Starting Raspberry Pi 5 Minimal LXQt/Openbox Setup..."
 # ======================================================
 banner "1. SYSTEM UPDATE"
 # ======================================================
-print_status "    Updating system packages..."
-sudo apt update
-sudo apt full-upgrade -y
+print_status "    Updating system packages..." && sleep 1
+sudo apt update && sleep 1
+sudo apt full-upgrade -y && sleep 1
 
 # ======================================================
 banner "2. INSTALL X11 AND LXQT CORE"
@@ -207,26 +207,14 @@ wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bas
 print_status "    Pi-Apps installed successfully! You can run it with: pi-apps"
 
 # ======================================================
-# 6. INSTALL SUBLIME TEXT 3 (UPDATED FOR BOOKWORM)
+banner "6. INSTALL USER DIRECTORIES"
 # ======================================================
-#print_status "Installing Sublime Text 3..."
-#
-# Install prerequisites for adding repositories securely
-#sudo apt install -y gnupg2 wget
-#
-# Download the GPG key, de-armor it, and save it to the keyrings directory
-#sudo mkdir -p /usr/share/keyrings
-#wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | \
-#    gpg --dearmor | \
-#    sudo tee /usr/share/keyrings/sublimehq-archive-keyring.gpg > /dev/null
-#
-# Add the Sublime Text repository, explicitly pointing to the new keyring
-#echo "deb [signed-by=/usr/share/keyrings/sublimehq-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | \
-#    sudo tee /etc/apt/sources.list.d/sublime-text.list
-#
-# Update package list and install Sublime Text
-#sudo apt update
-#sudo apt install -y sublime-text
+
+mkdir -p "$HOME/.local/bin"
+mkdir -p "$HOME/.config/icons"
+mkdir -p "$HOME/.config/themes"
+mkdir -p "$HOME/.local/share/applications" "$HOME/.local/share/icons" "$HOME/.config/autostart"
+print_status "Created ~/.local/bin, ~/.config/icons, ~/.config/themes"
 
 # ======================================================
 banner "7. INSTALL OH-MY-POSH AND NERD FONTS (ROBUST VERSION)"
@@ -237,7 +225,9 @@ sudo apt install -y curl unzip
 
 # Install Oh-My-Posh with sudo to ensure system-wide availability
 print_status "    Attempting to install Oh-My-Posh..."
-sudo curl -s https://ohmyposh.dev/install.sh | sudo bash -s
+#sudo curl -s https://ohmyposh.dev/install.sh | sudo bash -s
+
+sudo curl -s https://ohmyposh.dev/install.sh | sudo bash -s -- -d /usr/local/bin
 
 #sudo -u "$TARGET_USER" bash -lc 'curl -s https://ohmyposh.dev/install.sh | bash -s'
 
