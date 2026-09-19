@@ -614,7 +614,8 @@ echo "  LXQt theme     : ${LXQT_THEME}"
 echo "  Qt style       : kvantum-dark${KV_THEME:+  (engine: ${KV_THEME})}"
 echo "  Font           : ${UI_FONT_NAME} ${UI_FONT_SIZE}, Normal"
 echo "  Panel          : ${PANEL_HEIGHT}px, ${PANEL_ICON_SIZE}px icons, bottom"
-echo "  Menu icon      : ${RASPBERRY_ICON}"
+# echo "  Menu icon      : ${RASPBERRY_ICON}"
+
 if [ "$NO_DESKTOP" = "1" ]; then
 echo "  Desktop        : not enabled (NO_DESKTOP=1); settings written"
 else
