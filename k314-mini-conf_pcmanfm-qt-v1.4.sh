@@ -69,6 +69,7 @@ printf ".\n.\n"
 if dpkg -s crudini &>/dev/null; then
   print_status "Crudini package found ..."
 else
+	printf "\n"
 	print_warning "Crudini package not found... installing it..."
 	sudo apt install -y --no-install-recommends crudini  
 	print_status "Crudini installation done ..."
