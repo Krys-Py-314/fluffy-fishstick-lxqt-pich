@@ -67,10 +67,10 @@ printf ".\n.\n"
 if dpkg -s crudini &>/dev/null; then
   print_status "Crudini package found ..."
 else
-	printf "\n"
-	print_warning "Crudini package not found... installing it..."
-	sudo apt install -y --no-install-recommends crudini  
-	print_status "Crudini installation done ..."
+    printf "\n"
+    print_warning "Crudini package not found... installing it..."
+    sudo apt install -y --no-install-recommends crudini
+    print_status "Crudini installation done ..."
 fi
 
 if dpkg -s qterminal &>/dev/null; then
@@ -78,21 +78,27 @@ if dpkg -s qterminal &>/dev/null; then
 else
     printf "\n"
     print_warning "qterminal package not found... installing it..."
-    sudo apt install -y --no-install-recommends qterminal  
+    sudo apt install -y --no-install-recommends qterminal
     print_status "qterminal installation done ..."
 fi
 
 
-~/.config/qterminal.org/qterminal.ini
-[General]
-fontFamily=Noto Mono
-fontSize=10
-dir="$HOME/.config/qterminal.org"
+#~/.config/qterminal.org/qterminal.ini
+section="General"
+fontFamily="Noto Mono"
+fontSize="10"
 
+dir="$HOME/.config/qterminal.org"
 banner "Configuration of $dir"
-#mkdir -p "$dir" && touch "$dir/settings.conf"
-crudini --set "$dir/qterminal.ini" "General" "fontFamily" "Noto Mono"
-crudini --set "$dir/qterminal.ini" "General" "fontSize" "10"
+# mkdir -p "$dir" && touch "$dir/settings.conf"
+
+print_status "... Setting fontFamilly to $fontFamily..."
+
+crudini --set "$dir/qterminal.ini" "$section" "fontFamily" "$fontFamily"
+
+print_status "... Setting fontSize to $fontSize..."
+
+crudini --set "$dir/qterminal.ini" "$section" "fontSize" "$fontSize"
 
 printf ".\n.\n"
 print_status "Configuration of [ qterminal ] END..."
