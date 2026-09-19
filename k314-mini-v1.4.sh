@@ -146,16 +146,17 @@ banner "4. INSTALL APPLICATIONS"
 print_status "    Installing applications..."
 
 # Terminal and text editors
-sudo apt install -y \
+sudo apt install -y --no-install-recommends \
     rxvt-unicode \
     l3afpad \
     pcmanfm-qt
 
 # Web browser (vimb - lightweight webkit browser)
-sudo apt install -y vimb
+sudo apt install -y --no-install-recommends \
+    vimb
 
 # Development tools
-sudo apt install -y \
+sudo apt install -y --no-install-recommends \
     gcc \
     g++ \
     make \
