@@ -587,6 +587,7 @@ alias edit='l3afpad'
 alias leafpad='l3afpad'
 alias hh='history'
 alias hl='history 20'
+alias fl='fc-list'
 
 # Oh My Posh prompt (only for interactive shells with a real terminal).
 if command -v oh-my-posh >/dev/null 2>&1 && [ -n "${PS1:-}" ]; then
