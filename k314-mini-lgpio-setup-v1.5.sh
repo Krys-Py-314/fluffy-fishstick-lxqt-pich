@@ -171,8 +171,6 @@ unzip master.zip
 
 cd lg-master
 
-
-
 # ===========================================================================
 banner "03 - Compile and install the C library"
 # ===========================================================================
@@ -184,7 +182,7 @@ banner "04 - Update the system library cache"
 # ===========================================================================
 sudo ldconfig
 
-
+cd $HOME
 
 print_status " "
 print_status "Setup finished."
