@@ -126,10 +126,7 @@ printf "\n    Target instal dir : %s" "$fonts_dir"
 printf "\n    NerdFonts version : %s" "$nerd_fonts_release_version"
 printf "\n    Fonts to install  : %s" ${#fonts[@]}
 printf "\n"
-printf "\n    If you wish to change this, abort and comment"
-printf "\n    out any unwanted fonts in this script."
-printf "\n\n    Press ENTER to install, C-c to abort.\n\n"
-read -r
+
 
 for font in "${fonts[@]}"; do
 	((count++))
