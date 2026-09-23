@@ -145,7 +145,9 @@ apt_install \
     build-essential \
     wget \
     unzip \
-    swig
+    swig \
+    python3-setuptools 
+
 
 
 # ===========================================================================
