@@ -157,7 +157,7 @@ wget https://github.com/joan2937/lg/archive/master.zip
 
 
 print_status "Installing LGPIO Master..."
-PACKAGE = "https://github.com/joan2937/lg/archive/master.zip"
+PACKAGE="https://github.com/joan2937/lg/archive/master.zip"
 if wget  "$PACKAGE" ; then
     print_status "    Download of $PACKAGE succesfull ...."
 else
@@ -168,7 +168,6 @@ else
 fi
 
 unzip master.zip
-
 cd lg-master
 
 # ===========================================================================
