@@ -5,8 +5,8 @@
 # Dark theme + icon pass for the minimal LXQt/Openbox desktop built by
 # inst-min-lxqt-rpi5.sh. Run it AFTER that script.
 #
-#     chmod +x inst_dark_theme_and_icons.sh
-#     ./inst_dark_theme_and_icons.sh
+#     chmod +x k314-mini-dark-v1.5.sh
+#     ./k314-mini-dark-v1.5.sh
 #
 # Applies: Arc-Dark GTK2/GTK3, Papirus-Dark icons, a generated Arc-Dark-Square
 # Openbox theme, Kvantum dark Qt styling, a 48px LXQt panel with a raspberry
@@ -55,7 +55,7 @@ print_status "Starting Dark Theme and Icons Setup..."
 # ---------------------------------------------------------------------------
 # Globals
 # ---------------------------------------------------------------------------
-LOGFILE="$HOME/inst_dark_theme_and_icons.log"
+LOGFILE="$HOME/.k314-mini-dark-v1.5.log"
 SKIPPED_PKGS=()
 FAILED_STEPS=()
 
