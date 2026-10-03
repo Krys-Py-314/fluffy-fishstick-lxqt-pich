@@ -76,7 +76,6 @@ banner "2. INSTALL X11 AND LXQT CORE"
 # ======================================================
 print_status "    Installing X11, Openbox, and LXQt..."
 sudo apt-get install -y \
-    xserver-xorg \
     xserver-xorg-core \
     xserver-xorg-input-libinput \
     xinit \
@@ -90,10 +89,12 @@ sudo apt-get install -y \
     lxqt-panel \
     lxqt-config \
     lxqt-session \
-    lxqt-qtplugin \
-    lxqt-about \
-    lightdm \
-    lightdm-gtk-greeter
+    lxqt-qtplugin 
+    
+#     xserver-xorg \
+#    lxqt-about \
+#    lightdm \
+#    lightdm-gtk-greeter
 
 print_status "    Installing some usefull ... tools sudo,git,curl,wget"
 sudo apt-get install -y --no-install-recommends\
