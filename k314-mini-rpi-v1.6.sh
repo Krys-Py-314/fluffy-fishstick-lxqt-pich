@@ -712,6 +712,15 @@ print_status "Installed ~/.local/bin/memcheck (run it after logging in to the de
 banner "21. CONFIGURING PCMANFM-QT"
 # ======================================================
 
+cp "./k314-wallpapers" "$HOME/Pictures"
+
+
+
+
+# ======================================================
+banner "22. CLEAN UP"
+# ======================================================
+
 print_status "    Cleaning up..."
 
 # Clean package cache
