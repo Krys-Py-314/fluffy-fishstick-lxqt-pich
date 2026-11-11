@@ -712,8 +712,12 @@ print_status "Installed ~/.local/bin/memcheck (run it after logging in to the de
 banner "21. CONFIGURING PCMANFM-QT"
 # ======================================================
 
-cp "./k314-wallpapers" "$HOME/Pictures"
+cp -r "./k314-wallpapers" "$HOME/Pictures"
+cp -r "$HOME/Pictures/k314-wallpapers" "/usr/share/desktop-base"
 
+#ln  -s  "/usr/share/desktop-base/"  "/usr/share/k314-wallpapers/k314-wallpapers" 
+
+feh --bg-fill "$HOME/Pictures/Hexagons-1920x1080.jpg"
 
 
 

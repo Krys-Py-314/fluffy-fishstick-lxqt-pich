@@ -229,17 +229,17 @@ if [ ! -f "$PANEL" ]; then
     fi
 fi
 
-mapfile -t SECTIONS < <(fancymenu_sections "$PANEL")
-if [ "${#SECTIONS[@]}" -eq 0 ]; then
-    print_error "No Fancy Menu found in ${PANEL}."
-    if grep -q '^[ \t]*type[ \t]*=[ \t]*mainmenu' "$PANEL"; then
-        print_error "The panel uses the classic Application Menu (mainmenu), which has no"
-        print_error "category position option. Add the \"Fancy Menu\" widget to the panel"
-        print_error "(right-click the panel > Manage Widgets), then run this again."
-    fi
-    exit 1
-fi
-print_status "Fancy Menu section(s): ${SECTIONS[*]}"
+#mapfile -t SECTIONS < <(fancymenu_sections "$PANEL")
+#if [ "${#SECTIONS[@]}" -eq 0 ]; then
+#    print_error "No Fancy Menu found in ${PANEL}."
+#    if grep -q '^[ \t]*type[ \t]*=[ \t]*mainmenu' "$PANEL"; then
+#        print_error "The panel uses the classic Application Menu (mainmenu), which has no"
+#        print_error "category position option. Add the \"Fancy Menu\" widget to the panel"
+#        print_error "(right-click the panel > Manage Widgets), then run this again."
+#    fi
+#    exit 1
+#fi
+#print_status "Fancy Menu section(s): ${SECTIONS[*]}"
 
 # ---------------------------------------------------------------------------
 # Stop the panel so it cannot overwrite the edit when it exits
