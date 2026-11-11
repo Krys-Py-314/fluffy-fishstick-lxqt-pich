@@ -148,8 +148,8 @@ print_status "    Installing applications..."
 
 # Terminal and text editors
 sudo apt install -y --no-install-recommends \
-    rxvt-unicode \
-    l3afpad \
+    qterminal \
+    featherpad \
     pcmanfm-qt
 
 # Web browser (vimb - lightweight webkit browser)
@@ -330,7 +330,7 @@ icon_theme=Numix
 [mainmenu]
 alignment=Left
 categoriesAtRight=false
-type=fancymenu
+type=mainmenu
 
 [panel0]
 size=45
