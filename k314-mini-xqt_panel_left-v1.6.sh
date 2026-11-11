@@ -157,6 +157,9 @@ refresh_menu_cache() {
     touch "$APPS_DIR" 2>/dev/null || true
 }
 
+
+
+
  print_status "Renaming menu entries..."
     mkdir -p -- "$APPS_DIR" || { print_error "Could not create ${APPS_DIR}"; exit 1; }
     for spec in "${RENAMES[@]}"; do
